@@ -16,8 +16,7 @@ class Source(Base):
         self.kb = None
 
     def on_init(self, context):
-        kb_path = self.vim.eval('deoplete#sources#powershell#kb')
-        self.init_kb(kb_path)
+        pass
 
     def gather_candidates(self, context):
         current = context['complete_str']
