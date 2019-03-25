@@ -24,7 +24,7 @@ class Source(Base):
         self.previous_param_suggestions = []
 
     def on_init(self, context):
-        init_kb('{}/{}'.format(script_dir, 'ps-commands.json'))
+        self.init_kb('{}/{}'.format(script_dir, 'ps-commands.json'))
 
     def gather_candidates(self, context):
         current = context['complete_str']
