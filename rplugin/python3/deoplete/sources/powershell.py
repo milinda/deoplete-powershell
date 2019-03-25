@@ -24,9 +24,10 @@ class Source(Base):
         line = context['position'][1]
         line_text = getlines(self.vim, line, line)[0]
         
-        debug(self.vim, '{}:{}:{}'.format(current, line, line_text)
-        
-        return ['Get-AzureRmResource', 'Get-AzureADUser']
+        return [dict(word='Get-AzureRmResource',
+                     abbr='GAzR',
+                     info='Get Azure Rm Resource',
+                     dup=1)]
 
     def init_kb(self, kb_path):
         pass
