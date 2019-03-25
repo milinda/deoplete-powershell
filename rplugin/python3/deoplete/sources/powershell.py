@@ -28,9 +28,12 @@ class Source(Base):
 
     def gather_candidates(self, context):
         current = context['complete_str']
+        column = context['position'][0]
         line = context['position'][1]
         line_text = getlines(self.vim, line, line)[0]
-       
+        
+        debug(self.vim, '{}:c({}):l({})'.format(current, column, line)
+
         if current.startswith('-'):
             if not self.previous_cmdlet_suggestions:
                 return []
