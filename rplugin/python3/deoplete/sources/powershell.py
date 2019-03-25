@@ -25,6 +25,8 @@ class Source(Base):
         line_text = getlines(self.vim, line, line)[0]
         
         debug(self.vim, '{}:{}:{}'.format(current, line, line_text)
+        
+        return ['Get-AzureRmResource', 'Get-AzureADUser']
 
     def init_kb(self, kb_path):
         pass
