@@ -24,7 +24,7 @@ class Source(Base):
         self.previous_param_suggestions = []
 
     def on_init(self, context):
-        pass
+        init_kb('{}/{}'.format(script_dir, 'ps-commands.json'))
 
     def gather_candidates(self, context):
         current = context['complete_str']
@@ -53,7 +53,7 @@ class Source(Base):
             return out
 
     def init_kb(self, kb_path):
-        with open('{}/{}'.format(script_dir, 'ps-commands.json'), 'rb') as f:
+        with open(kb_path, 'rb') as f:
             cmdlets_info = json.load(f)
             for cmdlet in [*cmdlets_info]:
                 self.cmdlets.append(cmdlet)
