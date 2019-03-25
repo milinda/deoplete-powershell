@@ -1,6 +1,11 @@
+import json
+import re
+import os
 from .base import Base
 from deoplete.util import debug, getlines
 
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
 
 class Source(Base):
 
@@ -13,7 +18,10 @@ class Source(Base):
         self.rank = 500
         self.current = vim.current
         self.vim = vim
-        self.kb = None
+        self.cmdlets = []
+        self.cmdlets_to_params = {}
+        self.previous_cmdlet_suggestions = []
+        self.previous_param_suggestions = []
 
     def on_init(self, context):
         pass
@@ -22,14 +30,37 @@ class Source(Base):
         current = context['complete_str']
         line = context['position'][1]
         line_text = getlines(self.vim, line, line)[0]
-        
-        return [dict(word='Get-AzureRmResource',
-                     abbr='GAzR',
-                     info='Get Azure Rm Resource',
-                     dup=1)]
+       
+        if current.startswith('-'):
+            if not self.previous_cmdlet_suggestions:
+                return []
+            else:
+                for cmdlet in self.previous_cmdlet_suggestions:
+                    if re.findall('\\b{}\\b'.format(cmdlet), line_text):
+                        params = self.cmdlets_to_params[cmdlet]
+                        candidates = [p for p in params if current.lower() in p.lower()]
+        else:
+            candidates = [c for c in self.cmdlets if current.lower() in c.lower()]
+            self.previous_cmdlet_suggestions = candidates
+
+        if not candidates:
+            return []
+        else:
+            out = []
+            for c in candidates:
+                out.append(dict(word=c,abbr=c,info='',dup=1))
+
+            return out
 
     def init_kb(self, kb_path):
-        pass
+        with open('{}/{}'.format(script_dir, 'ps-commands.json'), 'rb') as f:
+            cmdlets_info = json.load(f)
+            for cmdlet in [*cmdlets_info]:
+                self.cmdlets.append(cmdlet)
+                self.cmdlets_to_params[cmdlet] = cmdlets_info[cmdlet]
+
+
+            
 
 
 
