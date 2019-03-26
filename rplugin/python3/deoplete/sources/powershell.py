@@ -33,7 +33,7 @@ class Source(Base):
         line_text = getlines(self.vim, line, line)[0]
         
         with open('/tmp/ps-deoplete.log', 'a+') as l:
-            l.writelines(['{}:c({}):l({})'.format(current, column, line)])
+            l.writelines(['{}:cp({}):i({}):l({})\n'.format(current, context['complete_position'], context['input'], line)])
 
         if current.startswith('-'):
             if not self.previous_cmdlet_suggestions:
