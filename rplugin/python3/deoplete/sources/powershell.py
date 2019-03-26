@@ -28,14 +28,11 @@ class Source(Base):
 
     def gather_candidates(self, context):
         current = context['complete_str']
-        column = context['position'][0]
+        complete_position = context['complete_position']
         line = context['position'][1]
         line_text = getlines(self.vim, line, line)[0]
         
-        with open('/tmp/ps-deoplete.log', 'a+') as l:
-            l.writelines(['{}:cp({}):i({}):l({})\n'.format(current, context['complete_position'], context['input'], line)])
-
-        if current.startswith('-'):
+        if complete_position != 0 and line_text[complete_position - 1] == '-':
             if not self.previous_cmdlet_suggestions:
                 return []
             else:
