@@ -31,7 +31,8 @@ class Source(Base):
         complete_position = context['complete_position']
         line = context['position'][1]
         line_text = getlines(self.vim, line, line)[0]
-        
+        candidates = []
+
         if complete_position != 0 and line_text[complete_position - 1] == '-':
             if not self.previous_cmdlet_suggestions:
                 return []
